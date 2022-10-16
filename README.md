@@ -1,1 +1,1 @@
-# group_project_systems
+# Wasted Cats Bot
