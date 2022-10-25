@@ -2,6 +2,7 @@ DATABASE_NAME = "default"
 MONGO_SRV = "MONGO_SRV"
 MONGO_USER = "MONGO_USER"
 MONGO_PASSWORD = "MONGO_PASSWORD"
+CAT_API_KEY = "CAT_API_KEY"
 
 # outputs of breed_analysis/analysis.ipynb
 HANDLES = (

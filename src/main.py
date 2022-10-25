@@ -1,30 +1,38 @@
 import os
 import json
-import urllib3
-import requests
-import pymongo
+import logging
 
-from typing import Any
+from telegram_client import TelegramClient
+from bot import Bot
+from typing import Any, Union
 
-TG_TOKEN = os.getenv("TG_TOKEN")
-URL = f"https://api.telegram.org/bot{TG_TOKEN}/"
-
-http = urllib3.PoolManager()
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel("DEBUG")
 
 
-def send_message(text: str, chat_id: str) -> None:
-    final_text = "Ваше сообщение было: " + text
-    url = URL + f"sendMessage?text={final_text}&chat_id={chat_id}"
-    http.request("GET", url)
+def handler(event: dict[str, str], context: Any) -> dict[str, Union[str, int]]:
+    try:
+        message = json.loads(event["body"])
+        LOGGER.debug(message)
 
+        if "callback_query" in message.keys():
+            tg = TelegramClient(
+                chat_id=message["callback_query"]["message"]["chat"]["id"],
+                token=os.getenv("TG_TOKEN"),
+            )
+            tg.answer_callback(query_id=message["callback_query"]["id"])
+            return {"statusCode": 200}
+        else:
+            tg = TelegramClient(
+                chat_id=message["message"]["chat"]["id"],
+                token=os.getenv("TG_TOKEN"),
+            )
+            message_text = message["message"]["text"]
+            Bot(telegram_client=tg, message_text=message_text).run()
+            return {"statusCode": 200}
 
-def handler(event: dict[str, str], context: Any) -> dict[str, int]:
-    # все сообщение
-    message = json.loads(event['body'])
-    # id чата, чтобы потом отправить в тот же диалог
-    chat_id = message['message']['chat']['id']
-    # сам текст
-    reply = message['message']['text']
-    send_message(reply, chat_id)
-    # для отладки -- чтобы в логах посмотреть на структуру пришедшего события
-    return {'statusCode': 200}
+    except Exception as e:
+        LOGGER.error(repr(e))
+        return {
+            "statusCode": 500,
+        }

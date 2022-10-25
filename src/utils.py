@@ -12,6 +12,7 @@ from constants import (
     MONGO_PASSWORD,
     CAT_API_URL,
     CAT_API_SEARCH_ENDPOINT,
+    CAT_API_KEY,
 )
 
 
@@ -35,7 +36,7 @@ def _get_cat_image_url(breeds: tuple) -> str:
             "breed_ids": breed,
         },
         headers={
-            'x-api-key': os.environ.get('CAT_API_KEY'),
-            'mime_types': 'png,jpg',
+            "x-api-key": os.environ.get(CAT_API_KEY),
+            "mime_types": "png,jpg",
         },
     ).json()[0]["url"]
