@@ -1,6 +1,7 @@
 *.zip
 .idea/
 *_secrets.tfvars
+default.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

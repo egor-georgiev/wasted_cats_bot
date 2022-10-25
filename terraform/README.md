@@ -7,7 +7,6 @@ This Terraform module manages:
 
 ## running this module
 
-1. obtain bot token from telegram botfather and `export TG_TOKEN="<token value>"`
-2. obtain bearer token: `export YC_TOKEN=$(yc iam create-token)`
-3. one-time init: `terraform init`
-4. apply: `terraform apply -var-file envs/default.tfvars -var tg_token=$TG_TOKEN`
+1. obtain bearer token: `export YC_TOKEN=$(yc iam create-token)`
+2. one-time init: `terraform init`
+3. apply: `terraform apply -var-file envs/default.tfvars`
