@@ -7,6 +7,10 @@ from pymongo.database import Collection
 from constants import (DATABASE_NAME, MONGO_PASSWORD, MONGO_SRV, MONGO_USER)
 
 
+# TODO:
+#   * speed up reward history lookup
+#   * ditch np in favor of stdlib
+
 class EpsilonGreedy:
     def __init__(self, user_id: str, n_arms: int, e: float = 0.01) -> None:
         self.user_id = user_id
