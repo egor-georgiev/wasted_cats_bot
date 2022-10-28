@@ -1,10 +1,9 @@
-import os
 import json
 import logging
-
-from telegram_client import TelegramClient
-from bot import Bot
+import traceback
 from typing import Any, Union
+
+from utils import process_callback, process_message
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel("DEBUG")
@@ -16,23 +15,14 @@ def handler(event: dict[str, str], context: Any) -> dict[str, Union[str, int]]:
         LOGGER.debug(message)
 
         if "callback_query" in message.keys():
-            tg = TelegramClient(
-                chat_id=message["callback_query"]["message"]["chat"]["id"],
-                token=os.getenv("TG_TOKEN"),
-            )
-            tg.answer_callback(query_id=message["callback_query"]["id"])
+            process_callback(message)
             return {"statusCode": 200}
         else:
-            tg = TelegramClient(
-                chat_id=message["message"]["chat"]["id"],
-                token=os.getenv("TG_TOKEN"),
-            )
-            message_text = message["message"]["text"]
-            Bot(telegram_client=tg, message_text=message_text).run()
+            process_message(message)
             return {"statusCode": 200}
 
-    except Exception as e:
-        LOGGER.error(repr(e))
+    except Exception:  # noqa
+        LOGGER.error(traceback.format_exc())
         return {
             "statusCode": 500,
         }

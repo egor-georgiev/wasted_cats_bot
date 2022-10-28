@@ -8,7 +8,7 @@ resource "yandex_resourcemanager_folder_iam_binding" "bot_service_account_role" 
   for_each  = toset(var.lambda_sa_roles)
   folder_id = var.folder_id
   role      = each.key
-  members   = [
+  members = [
     "serviceAccount:${yandex_iam_service_account.bot_service_account.id}",
   ]
 }

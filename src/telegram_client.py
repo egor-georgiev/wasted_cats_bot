@@ -1,5 +1,6 @@
-import requests
 import json
+
+import requests
 
 
 class TelegramClient:
@@ -33,8 +34,7 @@ class TelegramClient:
             },
         )
 
-    def send_photo_with_keyboard(self, photo_url: str) -> None:
-        bandit_id = 1
+    def send_photo_with_keyboard(self, photo_url: str, arm_id: int) -> None:
         self._send_request(
             endpoint="sendPhoto",
             params={
@@ -42,13 +42,25 @@ class TelegramClient:
                 "chat_id": self.chat_id,
                 "reply_markup": json.dumps({
                     "inline_keyboard": [[
-                        {"text": "👍", "callback_data": f"{bandit_id}:1"},
-                        {"text": "👎", "callback_data": f"{bandit_id}:0"},
+                        {"text": "👍", "callback_data": f"{arm_id}:1"},
+                        {"text": "👎", "callback_data": f"{arm_id}:0"},
                     ]],
                     "resize_keyboard": True,
                     "one_time_keyboard": True,
                 })
             },
+        )
+
+    def clear_inline_keyboard(self, message_id):
+        self._send_request(
+            endpoint="editMessageReplyMarkup",
+            params={
+                "chat_id": self.chat_id,
+                "message_id": message_id,
+                "reply_markup": json.dumps({
+                    "inline_keyboard": [[]],
+                })
+            }
         )
 
     def answer_callback(self, query_id):

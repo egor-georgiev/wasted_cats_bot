@@ -21,10 +21,10 @@ resource "mongodbatlas_advanced_cluster" "bot_mongodb_cluster" {
         instance_size = "M0"
         node_count    = 0
       }
-      priority      = 7
+      priority              = 7
       backing_provider_name = "AWS"
-      provider_name = "TENANT"
-      region_name   = "EU_WEST_1"
+      provider_name         = "TENANT"
+      region_name           = "EU_WEST_1"
     }
   }
 }
