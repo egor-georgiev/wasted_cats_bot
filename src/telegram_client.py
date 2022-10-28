@@ -51,7 +51,7 @@ class TelegramClient:
             },
         )
 
-    def clear_inline_keyboard(self, message_id):
+    def clear_inline_keyboard(self, message_id: int):
         self._send_request(
             endpoint="editMessageReplyMarkup",
             params={
@@ -63,7 +63,7 @@ class TelegramClient:
             }
         )
 
-    def answer_callback(self, query_id):
+    def answer_callback(self, query_id: int):
         self._send_request(
             endpoint="answerCallbackQuery",
             params={
