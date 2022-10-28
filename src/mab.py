@@ -26,7 +26,7 @@ class EpsilonGreedy:
         reward_history = []
         for n in range(self.n_arms):
             reward_history.append(
-                [value[str(n)] for value in self._collection.find({str(n): {'$exists': 1}})]
+                [value[str(n)] for value in self._collection.find({str(n): {"$exists": 1}})]
             )
 
         return reward_history
