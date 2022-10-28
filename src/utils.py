@@ -27,7 +27,7 @@ def process_callback(message: dict[Any]):
     tg.answer_callback(query_id=message["callback_query"]["id"])
     tg.clear_inline_keyboard(message_id=message["callback_query"]["message"]["message_id"])
 
-    _send_cat(chat_id, tg)
+    _send_cat(chat_id=chat_id, tg=tg)
 
 
 def process_message(message: dict[Any]):
@@ -47,15 +47,16 @@ def process_message(message: dict[Any]):
             "Let's start!\n"
             "To get a cat, press /cat."
         )
-        _send_cat(chat_id, tg)
+        _send_cat(chat_id=chat_id, tg=tg, arm_id=0)
     elif message_text == "/cat":
-        _send_cat(chat_id, tg)
+        _send_cat(chat_id=chat_id, tg=tg)
     else:
         tg.send_message(message="to get a cat press /cat")
 
 
-def _send_cat(chat_id: int, tg: TelegramClient):
-    arm_id = EpsilonGreedy(user_id=str(chat_id), n_arms=len(HANDLES)).decide()
+def _send_cat(chat_id: int, tg: TelegramClient, arm_id: int = None):
+    if arm_id is None:
+        arm_id = EpsilonGreedy(user_id=str(chat_id), n_arms=len(HANDLES)).decide()
     image_url = _get_cat_image_url(HANDLES[arm_id])
     tg.send_photo_with_keyboard(image_url, arm_id)
 
