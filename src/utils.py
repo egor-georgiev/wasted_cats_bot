@@ -27,9 +27,7 @@ def process_callback(message: dict[Any]):
     tg.answer_callback(query_id=message["callback_query"]["id"])
     tg.clear_inline_keyboard(message_id=message["callback_query"]["message"]["message_id"])
 
-    arm_id = EpsilonGreedy(user_id=str(chat_id), n_arms=len(HANDLES)).decide()
-    image_url = _get_cat_image_url(HANDLES[arm_id])
-    tg.send_photo_with_keyboard(image_url, arm_id)
+    _send_cat(chat_id, tg)
 
 
 def process_message(message: dict[Any]):
@@ -49,15 +47,17 @@ def process_message(message: dict[Any]):
             "Let's start!\n"
             "To get a cat, press /cat."
         )
-        arm_id = EpsilonGreedy(user_id=str(chat_id), n_arms=len(HANDLES)).decide()
-        image_url = _get_cat_image_url(HANDLES[arm_id])
-        tg.send_photo_with_keyboard(image_url, arm_id)
+        _send_cat(chat_id, tg)
     elif message_text == "/cat":
-        arm_id = EpsilonGreedy(user_id=str(chat_id), n_arms=len(HANDLES)).decide()
-        image_url = _get_cat_image_url(HANDLES[arm_id])
-        tg.send_photo_with_keyboard(image_url, arm_id)
+        _send_cat(chat_id, tg)
     else:
         tg.send_message(message="to get a cat press /cat")
+
+
+def _send_cat(chat_id: int, tg: TelegramClient):
+    arm_id = EpsilonGreedy(user_id=str(chat_id), n_arms=len(HANDLES)).decide()
+    image_url = _get_cat_image_url(HANDLES[arm_id])
+    tg.send_photo_with_keyboard(image_url, arm_id)
 
 
 def _get_cat_image_url(breeds: tuple) -> str:
