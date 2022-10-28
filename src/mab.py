@@ -8,7 +8,7 @@ from constants import (DATABASE_NAME, MONGO_PASSWORD, MONGO_SRV, MONGO_USER)
 
 
 # TODO:
-#   * speed up reward history lookup
+#   * speed up reward history lookup: O(mn) -> O(n)
 #   * ditch np in favor of stdlib
 
 class EpsilonGreedy:
